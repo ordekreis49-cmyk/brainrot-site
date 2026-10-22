@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brainrot Fuck Departmant</title>
+<meta name="description" content="Brainrot Fuck Departmant karakter forumu">
+<link rel="icon" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="logo"><h1 id="siteName">Brainrot Fuck Departmant</h1>
+  <nav><a href="#karakterler">Karakterler</a><a href="#biz-kimiz">Biz Kimiz</a><a href="#ekip">Ekibimiz</a><a href="admin.html">Admin</a></nav>
+</header>
+<div class="hero"><img src="logo.png" alt="logo"><h2 id="heroName"></h2><p id="slogan"></p></div>
+<section id="karakterler"><h3>Karakterler</h3><input id="search" placeholder="Karakter ara..."><div class="grid" id="chars"></div></section>
+<section id="biz-kimiz"><h3>Biz Kimiz</h3><div class="about" id="about"></div></section>
+<section id="ekip"><h3>Ekibimiz</h3><div class="grid" id="team"></div></section>
+<footer>© Brainrot Fuck Departmant</footer>
+<script>
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let D;
+function render(){
+  const q=document.getElementById("search").value.toLowerCase();
+  document.getElementById("chars").innerHTML=D.characters.filter(c=>(c.name+c.description+c.tags).toLowerCase().includes(q)).map(c=>`<div class="card"><img src="${esc(c.image)}" loading="lazy"><div class="b"><h4>${esc(c.name)}</h4><p>${esc(c.description)}</p>${(c.tags||"").split(",").filter(t=>t.trim()).map(t=>`<span class="tag">${esc(t.trim())}</span>`).join("")}</div></div>`).join("")||"<p>Karakter yok.</p>";
+}
+fetch("data.json?"+Date.now()).then(r=>r.json()).then(d=>{D=d;
+  siteName.textContent=heroName.textContent=d.siteName;document.title=d.siteName;
+  slogan.textContent=d.slogan;about.textContent=d.about;
+  team.innerHTML=d.team.map(m=>`<div class="card"><img src="${esc(m.image)}" loading="lazy"><div class="b"><h4>${esc(m.name)}</h4><p>${esc(m.role)}</p></div></div>`).join("");
+  render();});
+search.oninput=render;
+</script>
+</body>
+</html>
